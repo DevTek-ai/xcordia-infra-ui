@@ -1,0 +1,8 @@
+{
+    "PROJECT_NAME": "xcodia",    
+    "ENVIRONMENT": "prod",    
+    "WEBSITE" : {
+        "WEBSITE_INDEX_PAGE": "index.html",
+        "WEBSITE_ERROR_PAGE": "error.html"
+    }
+}
