@@ -15,15 +15,15 @@ export class InfraStack extends cdk.Stack {
 
 
     //-----------S3 BUCKET UI-------------
-    const s3Bucket_ui_files:s3.Bucket = new s3.Bucket(this, `${config.get('PROJECT_NAME')}-bucket-ui`, {
-      bucketName: `${config.get('PROJECT_NAME')}-bucket-${config.get('ENVIRONMENT')}`,
+    const s3Bucket_ui_shop_files:s3.Bucket = new s3.Bucket(this, `${config.get('PROJECT_NAME')}-bucket-ui-shop`, {
+      bucketName: `${config.get('PROJECT_NAME')}-bucket-${config.get('ENVIRONMENT')}-shop`,
       publicReadAccess: false,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       websiteIndexDocument: config.get('WEBSITE.WEBSITE_INDEX_PAGE'),
       websiteErrorDocument: config.get('WEBSITE.WEBSITE_ERROR_PAGE')
     });    
-    new cdk.CfnOutput(this, 'ui-bucket', { value: s3Bucket_ui_files.bucketName });
-    s3Bucket_ui_files.grantReadWrite(oai);
+    new cdk.CfnOutput(this, 'ui-bucket', { value: s3Bucket_ui_shop_files.bucketName });
+    s3Bucket_ui_shop_files.grantReadWrite(oai);
 
 
     //-----------S3 BUCKET UI ADMIN-------------
@@ -77,7 +77,7 @@ export class InfraStack extends cdk.Stack {
       originConfigs: [
         {// /*
           s3OriginSource: {
-            s3BucketSource: s3Bucket_ui_files,
+            s3BucketSource: s3Bucket_ui_shop_files,
             originAccessIdentity: oai
           },
           behaviors: [
