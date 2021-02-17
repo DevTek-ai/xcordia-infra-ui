@@ -22,7 +22,7 @@ export class InfraStack extends cdk.Stack {
       websiteIndexDocument: config.get('WEBSITE.WEBSITE_INDEX_PAGE'),
       websiteErrorDocument: config.get('WEBSITE.WEBSITE_ERROR_PAGE')
     });    
-    new cdk.CfnOutput(this, 'ui-bucket', { value: s3Bucket_ui_shop_files.bucketName });
+    new cdk.CfnOutput(this, 'ui-shop-bucket', { value: s3Bucket_ui_shop_files.bucketName });
     s3Bucket_ui_shop_files.grantReadWrite(oai);
 
 
