@@ -1,6 +1,7 @@
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as cf from '@aws-cdk/aws-cloudfront';
+import { Duration } from '@aws-cdk/aws-events/node_modules/@aws-cdk/core';
 
 const config = require('config');
 
@@ -84,6 +85,11 @@ export class InfraStack extends cdk.Stack {
             { 
               isDefaultBehavior: true, 
               allowedMethods: cf.CloudFrontAllowedMethods.ALL,
+              compress:true,
+              defaultTtl: Duration.minutes(5),
+              minTtl: Duration.minutes(5),
+              maxTtl: Duration.minutes(5)
+
             }
           ]
         },
@@ -98,9 +104,9 @@ export class InfraStack extends cdk.Stack {
               isDefaultBehavior: false,
               compress: true,
               pathPattern: '/version/*',              
-              // defaultTtl: cdk.Duration.minutes(0),
-              // minTtl: cdk.Duration.minutes(0),
-              // maxTtl: cdk.Duration.minutes(0),
+              defaultTtl: Duration.minutes(5),
+              minTtl: Duration.minutes(5),
+              maxTtl: Duration.minutes(5),
             }
           ]
         },
@@ -115,9 +121,9 @@ export class InfraStack extends cdk.Stack {
               isDefaultBehavior: false,
               compress: true,
               pathPattern: '/admin/*',
-              // defaultTtl: cdk.Duration.minutes(0),
-              // minTtl: cdk.Duration.minutes(0),
-              // maxTtl: cdk.Duration.minutes(0),
+              defaultTtl: Duration.minutes(5),
+              minTtl: Duration.minutes(5),
+              maxTtl: Duration.minutes(5),
             }
           ]
         },
