@@ -15,7 +15,7 @@ export class InfraStack extends cdk.Stack {
 
 
 
-    //-----------S3 BUCKET UI-------------
+    //-----------S3 BUCKET UI SHOP-------------
     const s3Bucket_ui_shop_files:s3.Bucket = new s3.Bucket(this, `${config.get('PROJECT_NAME')}-bucket-ui-shop`, {
       bucketName: `${config.get('PROJECT_NAME')}-bucket-${config.get('ENVIRONMENT')}-shop`,
       publicReadAccess: false,
@@ -41,19 +41,19 @@ export class InfraStack extends cdk.Stack {
 
 
     //-----------S3 BUCKET VERSIONING-------------
-    var versioning_bucket_name = `${config.get('PROJECT_NAME')}-versioning`
-    if (config.get('ENVIRONMENT') == 'dev' || config.get('ENVIRONMENT') == 'stg') {
-      versioning_bucket_name = `${versioning_bucket_name}-nonprod`
-    }
+    // var versioning_bucket_name = `${config.get('PROJECT_NAME')}-versioning`
+    // if (config.get('ENVIRONMENT') == 'dev' || config.get('ENVIRONMENT') == 'stg') {
+    //   versioning_bucket_name = `${versioning_bucket_name}-nonprod`
+    // }
 
-    const s3Bucket_versioning: s3.Bucket = new s3.Bucket(this, `${config.get('PROJECT_NAME')}-bucket-versioning`, {
-      bucketName: versioning_bucket_name,
-      publicReadAccess: false,
-      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL      
-    });
+    // const s3Bucket_versioning: s3.Bucket = new s3.Bucket(this, `${config.get('PROJECT_NAME')}-bucket-versioning`, {
+    //   bucketName: versioning_bucket_name,
+    //   publicReadAccess: false,
+    //   blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL      
+    // });
 
-    s3Bucket_versioning.grantReadWrite(oai);
-    new cdk.CfnOutput(this, 'ui-bucket-versioning', { value: s3Bucket_versioning.bucketName });
+    // s3Bucket_versioning.grantReadWrite(oai);
+    // new cdk.CfnOutput(this, 'ui-bucket-versioning', { value: s3Bucket_versioning.bucketName });
 
 
     //-----------S3 BUCKET DOCUMENTS-------------
@@ -68,15 +68,14 @@ export class InfraStack extends cdk.Stack {
 
       
     
-    //-----------CLOUDFRONT DISTRIBUTION-------------
-    
-    const distribution: cf.CloudFrontWebDistribution = new cf.CloudFrontWebDistribution(this, `cloudfront`, {
+    //-----------CLOUDFRONT DISTRIBUTION SHOP-------------    
+    const distribution_shop: cf.CloudFrontWebDistribution = new cf.CloudFrontWebDistribution(this, `cloudfront`, {
       priceClass: cf.PriceClass.PRICE_CLASS_ALL,
       comment: 'CDN to host frontend on S3',
       httpVersion:cf.HttpVersion.HTTP2,
       viewerProtocolPolicy:cf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       originConfigs: [
-        {// /*
+        {
           s3OriginSource: {
             s3BucketSource: s3Bucket_ui_shop_files,
             originAccessIdentity: oai
@@ -92,41 +91,7 @@ export class InfraStack extends cdk.Stack {
 
             }
           ]
-        },
-        {// /version/*
-          s3OriginSource: {
-            s3BucketSource: s3Bucket_versioning,
-            originAccessIdentity: oai,
-          },
-          behaviors: [
-            {
-              allowedMethods: cf.CloudFrontAllowedMethods.GET_HEAD,
-              isDefaultBehavior: false,
-              compress: true,
-              pathPattern: '/version/*',              
-              defaultTtl: Duration.minutes(5),
-              minTtl: Duration.minutes(5),
-              maxTtl: Duration.minutes(5),
-            }
-          ]
-        },
-        {// /admin/*
-          s3OriginSource: {
-            s3BucketSource: s3Bucket_ui_admin_files,
-            originAccessIdentity: oai,
-          },
-          behaviors: [
-            {
-              allowedMethods: cf.CloudFrontAllowedMethods.GET_HEAD,
-              isDefaultBehavior: false,
-              compress: true,
-              pathPattern: '/admin/*',
-              defaultTtl: Duration.minutes(5),
-              minTtl: Duration.minutes(5),
-              maxTtl: Duration.minutes(5),
-            }
-          ]
-        },
+        }
       ],
       defaultRootObject: 'index.html',
       errorConfigurations: [
@@ -144,7 +109,54 @@ export class InfraStack extends cdk.Stack {
         }
       ]
     });
-    new cdk.CfnOutput(this, 'Distribution URL', {value: distribution.distributionDomainName});        
+    new cdk.CfnOutput(this, 'Distribution URL SHOP', {value: distribution_shop.distributionDomainName});
+
+
+    //-----------CLOUDFRONT DISTRIBUTION ADMIN-------------    
+    const distribution_admin: cf.CloudFrontWebDistribution = new cf.CloudFrontWebDistribution(this, `cloudfront-admin`, {
+      priceClass: cf.PriceClass.PRICE_CLASS_ALL,
+      comment: 'Admin FE hosting',
+      httpVersion: cf.HttpVersion.HTTP2,
+      viewerProtocolPolicy: cf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      originConfigs: [
+        {// /*
+          s3OriginSource: {
+            s3BucketSource: s3Bucket_ui_admin_files,
+            originAccessIdentity: oai
+          },
+          behaviors: [
+            {
+              isDefaultBehavior: true,
+              allowedMethods: cf.CloudFrontAllowedMethods.ALL,
+              compress: true,
+              defaultTtl: Duration.minutes(5),
+              minTtl: Duration.minutes(5),
+              maxTtl: Duration.minutes(5)
+
+            }
+          ]
+        }
+      ],
+      defaultRootObject: 'index.html',
+      errorConfigurations: [
+        {
+          errorCode: 403,
+          errorCachingMinTtl: 10,
+          responseCode: 200,
+          responsePagePath: '/index.html'
+        },
+        {
+          errorCode: 404,
+          errorCachingMinTtl: 10,
+          responseCode: 200,
+          responsePagePath: '/index.html'
+        }
+      ]
+    });
+    new cdk.CfnOutput(this, 'Distribution URL ADMIN', { value: distribution_admin.distributionDomainName });
+
+
+
   }
 
   get_logical_env_name(resource_type: string): string {
