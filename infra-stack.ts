@@ -151,7 +151,11 @@ export class InfraStack extends cdk.Stack {
           responseCode: 200,
           responsePagePath: '/index.html'
         }
-      ]
+      ],
+      aliasConfiguration: {
+        names: [config.get('ADMIN_URL')],
+        acmCertRef: config.get('ACM_CERT_ARN')
+      }
     });
     new cdk.CfnOutput(this, 'Distribution URL ADMIN', { value: distribution_admin.distributionDomainName });
 
