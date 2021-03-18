@@ -127,6 +127,7 @@ export class InfraStack extends cdk.Stack {
           },
           behaviors: [
             {
+              pathPattern: "/documents/*",
               isDefaultBehavior: false,
               allowedMethods: cf.CloudFrontAllowedMethods.ALL,
               compress: true,
@@ -218,6 +219,7 @@ export class InfraStack extends cdk.Stack {
           },
           behaviors: [
             {
+              pathPattern: "/documents/*",
               isDefaultBehavior: false,
               allowedMethods: cf.CloudFrontAllowedMethods.ALL,
               compress: true,
