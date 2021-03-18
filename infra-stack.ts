@@ -2,6 +2,7 @@ import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as cf from '@aws-cdk/aws-cloudfront';
 import { Duration } from '@aws-cdk/aws-events/node_modules/@aws-cdk/core';
+import { OriginProtocolPolicy } from '@aws-cdk/aws-cloudfront';
 
 const config = require('config');
 
@@ -91,6 +92,49 @@ export class InfraStack extends cdk.Stack {
 
             }
           ]
+        },
+        {//API LB
+          customOriginSource: {
+            domainName: config.get('API_LB_DNS'),
+            httpPort: 8080,
+            originProtocolPolicy: OriginProtocolPolicy.HTTP_ONLY
+          },
+          behaviors: [
+            {
+              pathPattern: "/api/*",
+              isDefaultBehavior: false,
+              allowedMethods: cf.CloudFrontAllowedMethods.ALL,
+              compress: true,
+              defaultTtl: Duration.minutes(0),
+              minTtl: Duration.minutes(0),
+              maxTtl: Duration.minutes(0)
+            },
+            {
+              pathPattern: "/management/*",
+              isDefaultBehavior: false,
+              allowedMethods: cf.CloudFrontAllowedMethods.ALL,
+              compress: true,
+              defaultTtl: Duration.minutes(0),
+              minTtl: Duration.minutes(0),
+              maxTtl: Duration.minutes(0)
+            }
+          ]
+        },
+        {//DOCUMENTS
+          s3OriginSource: {
+            s3BucketSource: s3Bucket_documents,
+            originAccessIdentity: oai
+          },
+          behaviors: [
+            {
+              isDefaultBehavior: false,
+              allowedMethods: cf.CloudFrontAllowedMethods.ALL,
+              compress: true,
+              defaultTtl: Duration.minutes(0),
+              minTtl: Duration.minutes(0),
+              maxTtl: Duration.minutes(0)
+            }
+          ]
         }
       ],
       defaultRootObject: 'medicine.html',
@@ -137,6 +181,49 @@ export class InfraStack extends cdk.Stack {
               minTtl: Duration.minutes(5),
               maxTtl: Duration.minutes(5)
 
+            }
+          ]
+        },
+        {//API LB
+          customOriginSource: {
+            domainName: config.get('API_LB_DNS'),
+            httpPort: 8080,
+            originProtocolPolicy: OriginProtocolPolicy.HTTP_ONLY
+          },
+          behaviors: [
+            {
+              pathPattern: "/api/*",
+              isDefaultBehavior: false,
+              allowedMethods: cf.CloudFrontAllowedMethods.ALL,
+              compress: true,
+              defaultTtl: Duration.minutes(0),
+              minTtl: Duration.minutes(0),
+              maxTtl: Duration.minutes(0)
+            },
+            {
+              pathPattern: "/management/*",
+              isDefaultBehavior: false,
+              allowedMethods: cf.CloudFrontAllowedMethods.ALL,
+              compress: true,
+              defaultTtl: Duration.minutes(0),
+              minTtl: Duration.minutes(0),
+              maxTtl: Duration.minutes(0)
+            }
+          ]
+        },
+        {//DOCUMENTS
+          s3OriginSource: {
+            s3BucketSource: s3Bucket_documents,
+            originAccessIdentity: oai
+          },
+          behaviors: [
+            {
+              isDefaultBehavior: false,
+              allowedMethods: cf.CloudFrontAllowedMethods.ALL,
+              compress: true,
+              defaultTtl: Duration.minutes(0),
+              minTtl: Duration.minutes(0),
+              maxTtl: Duration.minutes(0)
             }
           ]
         }
