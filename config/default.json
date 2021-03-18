@@ -6,5 +6,6 @@
         "WEBSITE_ERROR_PAGE": "error.html"
     },
     "ACM_CERT_ARN": "arn:aws:acm:us-east-1:954676124495:certificate/8000f594-f4fa-4703-97d5-7de69457e105",
-    "ADMIN_URL": "admin.dev.x-cordia.com"
+    "ADMIN_URL": "admin.dev.x-cordia.com",
+    "SHOP_URL": "dev.x-cordia.com"
 }

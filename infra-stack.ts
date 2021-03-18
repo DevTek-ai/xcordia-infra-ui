@@ -93,21 +93,25 @@ export class InfraStack extends cdk.Stack {
           ]
         }
       ],
-      defaultRootObject: 'index.html',
+      defaultRootObject: 'medicine.html',
       errorConfigurations: [
         {
           errorCode: 403,
           errorCachingMinTtl: 10,
           responseCode: 200,
-          responsePagePath: '/index.html'
+          responsePagePath: '/medicine.html'
         },
         {
           errorCode: 404,
           errorCachingMinTtl: 10,
           responseCode: 200,
-          responsePagePath: '/index.html'
+          responsePagePath: '/medicine.html'
         }
-      ]
+      ],
+      aliasConfiguration: {
+        names: [config.get('SHOP_URL')],
+        acmCertRef: config.get('ACM_CERT_ARN')
+      }
     });
     new cdk.CfnOutput(this, 'Distribution URL SHOP', {value: distribution_shop.distributionDomainName});
 
