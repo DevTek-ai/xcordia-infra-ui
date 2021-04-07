@@ -151,7 +151,7 @@ export class InfraStack extends cdk.Stack {
       httpVersion: cf.HttpVersion.HTTP2,
       viewerProtocolPolicy: cf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       originConfigs: [
-        {// /*
+        {
           s3OriginSource: {
             s3BucketSource: s3Bucket_ui_admin_files,
             originAccessIdentity: oai
