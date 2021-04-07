@@ -1,6 +1,6 @@
 {    
     "ENVIRONMENT": "qa",    
-    "ADMIN_URL": "admin.qa.x-cordia.com",
-    "SHOP_URL": "qa.x-cordia.com",
-    "API_LB_DNS": ""
+    "ADMIN_URL": "admin.stg.x-cordia.com",
+    "SHOP_URL": "stg.x-cordia.com",
+    "API_LB_DNS": "xcodi-xcodi-104DX5XPLKZP-659667659.us-east-1.elb.amazonaws.com"
 }
