@@ -1,8 +1,6 @@
-{
-    "PROJECT_NAME": "xcodia",    
+{    
     "ENVIRONMENT": "qa",    
-    "WEBSITE" : {
-        "WEBSITE_INDEX_PAGE": "index.html",
-        "WEBSITE_ERROR_PAGE": "error.html"
-    }
+    "ADMIN_URL": "admin.qa.x-cordia.com",
+    "SHOP_URL": "qa.x-cordia.com",
+    "API_LB_DNS": ""
 }
