@@ -39,24 +39,7 @@ export class InfraStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'ui-admin-bucket', { value: s3Bucket_ui_admin_files.bucketName });
     s3Bucket_ui_admin_files.grantReadWrite(oai);
 
-
-
-    //-----------S3 BUCKET VERSIONING-------------
-    // var versioning_bucket_name = `${config.get('PROJECT_NAME')}-versioning`
-    // if (config.get('ENVIRONMENT') == 'dev' || config.get('ENVIRONMENT') == 'stg') {
-    //   versioning_bucket_name = `${versioning_bucket_name}-nonprod`
-    // }
-
-    // const s3Bucket_versioning: s3.Bucket = new s3.Bucket(this, `${config.get('PROJECT_NAME')}-bucket-versioning`, {
-    //   bucketName: versioning_bucket_name,
-    //   publicReadAccess: false,
-    //   blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL      
-    // });
-
-    // s3Bucket_versioning.grantReadWrite(oai);
-    // new cdk.CfnOutput(this, 'ui-bucket-versioning', { value: s3Bucket_versioning.bucketName });
-
-
+    
     //-----------S3 BUCKET DOCUMENTS-------------
     const s3Bucket_documents: s3.Bucket = new s3.Bucket(this, `${config.get('PROJECT_NAME')}-documents-${config.get('ENVIRONMENT')}`, {
       bucketName: `${config.get('PROJECT_NAME')}-documents-${config.get('ENVIRONMENT')}`,
